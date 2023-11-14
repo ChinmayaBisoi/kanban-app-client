@@ -5,7 +5,7 @@ import Link from "next/link";
 const Login = () => {
   return (
     <Link href="/login">
-      <Button className="w-20">Login</Button>;
+      <Button className="w-20">Login</Button>
     </Link>
   );
 };
