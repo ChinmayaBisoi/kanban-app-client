@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import { Button } from "./ui/button";
-import Overlay from "./common/Overlay";
+import { useState } from "react";
 import Popup from "./common/Popup";
+import { Button } from "./ui/button";
 import { toast } from "./ui/use-toast";
 
 const CreateBoard = () => {
