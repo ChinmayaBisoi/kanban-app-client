@@ -11,7 +11,7 @@ const Sidenav = ({ isMob = false }: { isMob?: boolean }) => {
   const { pathname } = useRouter();
   return (
     <aside
-      className={`w-52 ${
+      className={`w-52 mt-4 ${
         isMob ? "flex" : "hidden md:flex"
       }  flex-col fixed gap-4 text-center p-4`}
     >
