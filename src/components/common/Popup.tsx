@@ -22,7 +22,7 @@ const Popup = ({
       <div className="flex h-full items-center justify-center">
         <div
           ref={popupRef}
-          className={`mb-20 shadow border p-4 relative rounded-md ${wrapperCss}`}
+          className={`mb-20 shadow border p-4 relative rounded-md bg-white ${wrapperCss}`}
         >
           <Cross
             onClick={close}

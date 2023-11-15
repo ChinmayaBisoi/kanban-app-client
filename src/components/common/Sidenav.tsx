@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 const URLS = [
   { label: "Home", href: "/" },
-  { label: "Settings", href: "/settings" },
+  { label: "About Dev", href: "/about" },
 ];
 
 const Sidenav = ({ isMob = false }: { isMob?: boolean }) => {

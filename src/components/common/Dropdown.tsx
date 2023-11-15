@@ -1,5 +1,4 @@
-import { useOnOutsideClick } from "@/hooks/useOnOutsideClick";
-import React, { useRef } from "react";
+import React from "react";
 
 const Dropdown = ({
   show = false,
@@ -16,7 +15,7 @@ const Dropdown = ({
     <>
       {show ? (
         <div
-          className={`absolute bg-white border border-gray-300 rounded-md p-1 w-20 h-20 ${wrapperCss}`}
+          className={`absolute z-10 bg-white border border-gray-300 rounded-md p-1 ${wrapperCss}`}
         >
           {children}
         </div>

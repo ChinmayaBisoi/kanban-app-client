@@ -3,7 +3,11 @@ import EyeClose from "@/components/icons/EyeClose";
 import EyeOpen from "@/components/icons/EyeOpen";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
+import { useLoginStateDispatch } from "@/context/login-context";
+import login from "@/pages/api/auth/login";
+import register from "@/pages/api/auth/register";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 
 const AuthForm = ({ isRegisterForm = false }: { isRegisterForm?: boolean }) => {
@@ -12,6 +16,10 @@ const AuthForm = ({ isRegisterForm = false }: { isRegisterForm?: boolean }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const loginStateDispatch = useLoginStateDispatch();
+  const router = useRouter();
 
   function isValidRequest() {
     if (!email) {
@@ -23,11 +31,79 @@ const AuthForm = ({ isRegisterForm = false }: { isRegisterForm?: boolean }) => {
     }
   }
 
+  async function handleRegister() {
+    console.log(email, password, confirmPassword);
+    await register({ email, password })
+      .then((res) => {
+        console.log(res);
+        if (res.ok) {
+          toast({
+            title: "Registration success!",
+            description: "Please login now!",
+          });
+          router.push("/login");
+        } else {
+          toast({
+            title: "Unexpected error",
+            description: res.message,
+            variant: "destructive",
+          });
+        }
+      })
+      .catch((err) => {
+        toast({
+          title: "Error trying to register",
+          description: err,
+          variant: "destructive",
+        });
+      });
+  }
+
+  async function handleLogin() {
+    setLoading(true);
+    await login({ email, password })
+      .then((res) => {
+        console.log(res);
+        if (res.ok) {
+          toast({
+            title: "Logged in successfully",
+            description: "",
+          });
+          loginStateDispatch({
+            type: "login",
+            email: res.email,
+            userId: res.userId,
+          });
+          router.push("/");
+        } else {
+          toast({
+            title: "Unexpected error",
+            description: res.message,
+            variant: "destructive",
+          });
+        }
+      })
+      .catch((err) => {
+        toast({
+          title: "Error trying to log in",
+          description: err,
+          variant: "destructive",
+        });
+      });
+    setLoading(false);
+  }
+
   function hanldeFormSubmission() {
     const errMsg = isValidRequest();
     if (errMsg) {
       toast({ title: errMsg, variant: "destructive" });
       return;
+    }
+
+    if (isRegisterForm) {
+      handleRegister();
+    } else {
+      handleLogin();
     }
 
     // call register api here
@@ -130,7 +206,9 @@ const AuthForm = ({ isRegisterForm = false }: { isRegisterForm?: boolean }) => {
               {isRegisterForm ? "Login" : "Register"}
             </Link>
           </div>
-          <Button onClick={hanldeFormSubmission}>Register</Button>
+          <Button loading={loading} onClick={hanldeFormSubmission}>
+            {isRegisterForm ? "Register" : "Login"}
+          </Button>
         </div>
       </div>
     </div>
