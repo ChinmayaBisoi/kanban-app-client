@@ -1,8 +1,8 @@
 import { BACKEND_HOST } from "@/constants/env";
 
-export default async function deleteTodo({ todoId }) {
+export default async function deleteBoardById({ boardId }) {
   try {
-    const response = await fetch(`${BACKEND_HOST}/todos/${todoId}`, {
+    const response = await fetch(`${BACKEND_HOST}/boards/${boardId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

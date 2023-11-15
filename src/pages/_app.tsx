@@ -11,6 +11,7 @@ import { Poppins } from "next/font/google";
 import Head from "next/head";
 import { useEffect } from "react";
 import checkAuth from "./api/auth/check-auth";
+import React from "react";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],

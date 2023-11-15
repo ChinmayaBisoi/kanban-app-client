@@ -15,7 +15,7 @@ const Dropdown = ({
     <>
       {show ? (
         <div
-          className={`absolute z-10 bg-white border border-gray-300 rounded-md p-1 ${wrapperCss}`}
+          className={`absolute shadow-md z-10 bg-white border border-gray-300 rounded-md p-1 ${wrapperCss}`}
         >
           {children}
         </div>

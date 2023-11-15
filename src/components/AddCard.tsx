@@ -26,7 +26,7 @@ const AddCard = () => {
   }
 
   return (
-    <div className="relative">
+    <div className="relative mt-4 mb-40">
       <Button
         onClick={open}
         className="flex gap-1 items-center w-full text-sm h-fit"

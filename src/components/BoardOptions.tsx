@@ -1,12 +1,16 @@
 import { useOnOutsideClick } from "@/hooks/useOnOutsideClick";
 import { useRef, useState } from "react";
+import DeleteBoard from "./DeleteBoard";
 import Dropdown from "./common/Dropdown";
 import VerticalDots from "./icons/VerticalDots";
-import CreateList from "./CreateList";
-import AddMember from "./AddMember";
-import DeleteBoard from "./DeleteBoard";
+import BoardInfo from "./BoardInfo";
+import { BoardDetails } from "@/types/board";
 
-const BoardOptions = () => {
+const BoardOptions = ({
+  boardDetails,
+}: {
+  boardDetails: Partial<BoardDetails>;
+}) => {
   const [show, setShow] = useState(false);
   const colOptionsRef = useRef<HTMLDivElement>(null);
   useOnOutsideClick(colOptionsRef, close);
@@ -27,8 +31,8 @@ const BoardOptions = () => {
       />
       <Dropdown wrapperCss="right-0" show={show} close={close}>
         <div className="flex flex-col gap-1">
-          <AddMember />
-          <DeleteBoard />
+          <BoardInfo boardDetails={boardDetails} />
+          <DeleteBoard title={boardDetails.title} boardId={boardDetails.id} />
         </div>
       </Dropdown>
     </div>

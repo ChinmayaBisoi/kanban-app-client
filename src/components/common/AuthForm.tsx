@@ -126,6 +126,8 @@ const AuthForm = ({ isRegisterForm = false }: { isRegisterForm?: boolean }) => {
             </label>
             <div className="border p-1 px-3 border-gray-300 rounded-md">
               <input
+                autoComplete="on"
+                id="email"
                 type=""
                 className="outline-none w-full"
                 onChange={(e) => {
@@ -140,6 +142,7 @@ const AuthForm = ({ isRegisterForm = false }: { isRegisterForm?: boolean }) => {
             </label>
             <div className="border flex border-gray-300 rounded-md">
               <input
+                id="password"
                 type={showPassword ? "text" : "password"}
                 className="outline-none w-full mx-3"
                 onChange={(e) => {
@@ -170,6 +173,7 @@ const AuthForm = ({ isRegisterForm = false }: { isRegisterForm?: boolean }) => {
               </label>
               <div className="border flex border-gray-300 rounded-md">
                 <input
+                  id="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
                   className="outline-none w-full mx-3"
                   onChange={(e) => {

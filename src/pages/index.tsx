@@ -32,10 +32,7 @@ export default function Home() {
       .then((res) => {
         console.log(res);
         if (res.ok) {
-          const sanitizedBoards = res.boards.map((board: any) => {
-            return { ...board, id: board._id };
-          });
-          setBoards(sanitizedBoards);
+          setBoards(res.boards);
         } else {
           toast({
             title: "Unexpected error fetching boards",

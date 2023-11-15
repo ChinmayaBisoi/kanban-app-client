@@ -1,18 +1,19 @@
 import { useDrag, useDrop } from "react-dnd";
 import BoardColumnOptions from "./BoardColumnOptions";
 import AddCard from "./AddCard";
+import { Card, Column } from "@/types/board";
 
 export default function BoardColumn({
-  id,
-  label,
+  column,
   index,
   moveColumn,
 }: {
-  id: number;
-  label: string;
+  column: Column;
   index: number;
   moveColumn: (fromIndex: number, toIndex: number) => void;
 }) {
+  const id = column.id;
+
   const [, ref] = useDrag({
     type: "COLUMN",
     item: { id, index },
@@ -31,11 +32,20 @@ export default function BoardColumn({
   return (
     <div
       ref={(node) => ref(drop(node))}
-      className="border min-w-[208px] rounded-lg w-52 p-2 flex flex-col gap-2"
+      className="border min-w-[208px] overflow-y-scroll rounded-lg w-52 p-2 flex flex-col shadow gap-2"
     >
-      <div className="flex justify-between gap-4">
-        <p>{label}</p>
-        <BoardColumnOptions />
+      <div className="flex justify-between items-center gap-4">
+        <p className="ml-2 font-semibold text-sm">{column.title}</p>
+        <BoardColumnOptions column={column} />
+      </div>
+      <div className="flex flex-col gap-2">
+        {column.cards.map((card: Card) => {
+          return (
+            <div key={card.id} className="hover:bg-gray-100 rounded-md">
+              {card.title}
+            </div>
+          );
+        })}
       </div>
       <AddCard />
     </div>

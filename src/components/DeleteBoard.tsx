@@ -2,10 +2,23 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { toast } from "./ui/use-toast";
 import Popup from "./common/Popup";
+import deleteBoardById from "@/pages/api/boards/delete-board";
+import { useRouter } from "next/router";
 
-const DeleteBoard = () => {
+const DeleteBoard = ({
+  title = "",
+  boardId = "",
+}: {
+  title?: string;
+  boardId?: string;
+}) => {
   const [show, setShow] = useState(false);
-  const [email, setEmail] = useState("");
+  const [userEnteredTitle, setUserEnteredTitle] = useState("");
+
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
+
   function open() {
     setShow(true);
   }
@@ -14,13 +27,36 @@ const DeleteBoard = () => {
     setShow(false);
   }
 
-  function handleDeleteBoard() {
-    if (!email) {
-      toast({ title: "Email is required !", variant: "destructive" });
+  async function handleDeleteBoard() {
+    if (!userEnteredTitle) {
+      toast({ title: "Title is required !", variant: "destructive" });
       return;
     }
 
-    // api to ccreate list
+    setLoading(true);
+    await deleteBoardById({ boardId })
+      .then((res) => {
+        if (res.ok) {
+          toast({
+            title: "Board deleted",
+            description: "Redirecting to homepage",
+          });
+          router.push("/");
+        } else {
+          toast({
+            title: "Error deleting board",
+            variant: "destructive",
+          });
+        }
+      })
+      .catch((err) => {
+        toast({
+          title: "Error deleting board",
+          description: err.message || "",
+          variant: "destructive",
+        });
+      });
+    setLoading(false);
   }
 
   return (
@@ -35,19 +71,29 @@ const DeleteBoard = () => {
       </Button>
       <Popup wrapperCss="min-w-[400px]" show={show} close={close}>
         <div className="flex flex-col gap-4">
-          <h2 className="text-lg font-medium">Add Member</h2>
+          <h2 className="text-lg font-medium">
+            Delete Board <span className="underline">{title}</span> ?
+          </h2>
           <div className="flex flex-col">
-            <label htmlFor="email">Email</label>
             <input
+              id="title"
               type="text"
+              placeholder={title}
               className="outline-none border w-full px-3 py-2 rounded-lg"
               onChange={(e) => {
-                setEmail(e.target.value);
+                setUserEnteredTitle(e.target.value);
               }}
-              value={email}
+              value={userEnteredTitle}
             />
           </div>
-          <Button onClick={handleDeleteBoard}>Add</Button>
+          <Button
+            variant="destructive"
+            disabled={userEnteredTitle.trim() !== title.trim()}
+            loading={loading}
+            onClick={handleDeleteBoard}
+          >
+            Delete Board
+          </Button>
         </div>
       </Popup>
     </div>

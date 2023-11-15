@@ -1,12 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
-import VerticalDots from "./icons/VerticalDots";
-import Dropdown from "./common/Dropdown";
 import { useOnOutsideClick } from "@/hooks/useOnOutsideClick";
+import { useRef, useState } from "react";
+import Dropdown from "./common/Dropdown";
+import VerticalDots from "./icons/VerticalDots";
+import { Button } from "./ui/button";
+import { Column } from "@/types/board";
 
-const BoardColumnOptions = () => {
+const BoardColumnOptions = ({ column }: { column: Column }) => {
   const [show, setShow] = useState(false);
   const colOptionsRef = useRef<HTMLDivElement>(null);
   useOnOutsideClick(colOptionsRef, close);
+
+  function handleDeleteList() {}
 
   function close() {
     setShow(false);
@@ -20,10 +24,15 @@ const BoardColumnOptions = () => {
       <VerticalDots
         wrapperCss="hover:bg-gray-200"
         onClick={toggle}
-        iconCss="w-4 h-4"
+        iconCss=""
       />
-      <Dropdown wrapperCss="right-0" show={show} close={close}>
-        Hi from Dropdown
+      <Dropdown wrapperCss="right-0 p-0" show={show} close={close}>
+        <div className="flex flex-col gap-1">
+          {/* <AddMember /> */}
+          <Button onClick={handleDeleteList} variant="destructive">
+            Delete List
+          </Button>
+        </div>
       </Dropdown>
     </div>
   );
