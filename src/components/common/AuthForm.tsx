@@ -32,7 +32,8 @@ const AuthForm = ({ isRegisterForm = false }: { isRegisterForm?: boolean }) => {
   }
 
   async function handleRegister() {
-    console.log(email, password, confirmPassword);
+    setLoading(true);
+
     await register({ email, password })
       .then((res) => {
         console.log(res);
@@ -57,6 +58,7 @@ const AuthForm = ({ isRegisterForm = false }: { isRegisterForm?: boolean }) => {
           variant: "destructive",
         });
       });
+    setLoading(false);
   }
 
   async function handleLogin() {

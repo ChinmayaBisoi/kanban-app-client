@@ -1,26 +1,24 @@
 import { BACKEND_HOST } from "@/constants/env";
 
-export default async function addTodo({
+export default async function updateTodo({
   title,
   description,
+  id,
   isPinned = false,
   labels = [],
-  isChecked = false,
 }) {
   try {
-    const raw = JSON.stringify({
-      title,
-      description,
-      isChecked,
-      isPinned,
-      labels,
-    });
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
 
-    const response = await fetch(`${BACKEND_HOST}/todos/add`, {
-      method: "POST",
+    const raw = JSON.stringify({ title, description, id, isPinned, labels });
+
+    const response = await fetch(`${BACKEND_HOST}/todos`, {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
+      headers: myHeaders,
       body: raw,
       redirect: "follow",
       credentials: "include",

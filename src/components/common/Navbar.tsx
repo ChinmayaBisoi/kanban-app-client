@@ -18,7 +18,7 @@ const Navbar = () => {
           <h1 className="font-semibold">Kanban App</h1>
         </Link>
       </div>
-      {/* {isLoggedIn ? <UserProfileDropdown email={userEmail} /> : <Login />} */}
+      {isLoggedIn ? <UserProfileDropdown email={userEmail} /> : <Login />}
     </nav>
   );
 };

@@ -2,11 +2,21 @@ import { useState } from "react";
 import Popup from "./common/Popup";
 import { Button } from "./ui/button";
 import { toast } from "./ui/use-toast";
+import addBoard from "@/pages/api/boards/add-board";
+import { Board } from "@/types/board";
 
-const CreateBoard = () => {
+const CreateBoard = ({
+  isLoggedIn,
+  addNewBoard,
+}: {
+  isLoggedIn: boolean;
+  addNewBoard: (board: Board) => void;
+}) => {
   const [show, setShow] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
+
+  const [loading, setLoading] = useState(false);
 
   function open() {
     setShow(true);
@@ -17,21 +27,48 @@ const CreateBoard = () => {
   }
 
   function isValidCreateBoardRequest() {
-    if (!title) {
+    if (!isLoggedIn) {
+      return "Login to create boards !";
+    } else if (!title) {
       return "Title is required !";
     } else if (!description) {
       return "Description is required !";
     }
   }
 
-  function handleCreateBoard() {
+  async function handleCreateBoard() {
     const errMsg = isValidCreateBoardRequest();
-    if (!errMsg) {
+    if (errMsg) {
       toast({ title: errMsg, variant: "destructive" });
       return;
     }
 
-    //  call api to create board
+    setLoading(true);
+    await addBoard({ title, description })
+      .then((res) => {
+        console.log(res);
+        if (res.ok) {
+          toast({
+            title: "Board Created !",
+          });
+          addNewBoard({ ...res.board, id: res.board._id });
+          close();
+        } else {
+          toast({
+            title: "Unexpected error",
+            description: res.message,
+            variant: "destructive",
+          });
+        }
+      })
+      .catch((err) => {
+        toast({
+          title: "Error trying to register",
+          description: err,
+          variant: "destructive",
+        });
+      });
+    setLoading(false);
   }
 
   return (
@@ -63,7 +100,11 @@ const CreateBoard = () => {
               }}
             />
           </div>
-          <Button onClick={handleCreateBoard} className="mt-4">
+          <Button
+            loading={loading}
+            onClick={handleCreateBoard}
+            className="mt-4"
+          >
             Create
           </Button>
         </div>
