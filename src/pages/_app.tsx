@@ -48,7 +48,7 @@ function Wrapper({ Component, pageProps }: AppProps) {
   return (
     <div id="wrapper">
       <Head>
-        <title>Todo App</title>
+        <title>Kanban App</title>
       </Head>
       <Component {...pageProps} className={poppins.className} />
     </div>
