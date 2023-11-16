@@ -1,3 +1,1 @@
-export const BACKEND_HOST = process.env.NEXT_PUBLIC_IS_DEV
-  ? "http://localhost:8080"
-  : process.env.NEXT_PUBLIC_DEV_BACKEND_HOST;
+export const BACKEND_HOST = "https://cbi-kanban-app-server.onrender.com";

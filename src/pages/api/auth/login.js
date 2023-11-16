@@ -14,7 +14,6 @@ export default async function login({ email, password }) {
       credentials: "include",
       mode: "cors",
     };
-
     const response = await fetch(`${BACKEND_HOST}/auth/login`, requestOptions);
     return await response.json();
   } catch (error) {
