@@ -1,8 +1,8 @@
 import { BACKEND_HOST } from "@/constants/env";
 
-export default async function deleteListById({ listId }) {
+export default async function deleteCard({ cardId }) {
   try {
-    const response = await fetch(`${BACKEND_HOST}/columns/${listId}`, {
+    const response = await fetch(`${BACKEND_HOST}/cards/${cardId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

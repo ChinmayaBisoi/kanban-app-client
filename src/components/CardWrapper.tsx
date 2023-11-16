@@ -35,7 +35,7 @@ const CardWrapper = ({
   btnLoading: boolean;
 }) => {
   return (
-    <div className="relative mt-4 mb-40">
+    <div className={`relative ${btnTitle === "Add" ? "mb-40" : ""}`}>
       {children}
       <Popup
         wrapperCss="max-w-[550px] grow md:px-8 shadow-lg font-semibold"
@@ -80,7 +80,7 @@ const CardWrapper = ({
             />
           </div>
           <Button loading={btnLoading} onClick={onClickBtn}>
-            {btnTitle}
+            {btnTitle === "Edit" ? "Save" : btnTitle}
           </Button>
         </div>
       </Popup>

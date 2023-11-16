@@ -27,7 +27,7 @@ const DatePicker = ({ date, setDate }: { date: any; setDate: any }) => {
     <div ref={datePickerRef}>
       <div className="flex items-center shadow rounded-md">
         <Button variant="ghost" className="rounded-md" onClick={toggle}>
-          {date ? format(date, "dd MMM yyyy") : "Select Date"}
+          {date ? format(new Date(date), "dd MMM yyyy") : "Select Date"}
         </Button>
         <Button variant="ghost" className="px-1 rounded-md" onClick={clearDate}>
           <Cross wrapperCss="hover:bg-transparent" />
@@ -38,7 +38,10 @@ const DatePicker = ({ date, setDate }: { date: any; setDate: any }) => {
           <Calendar
             mode="single"
             selected={date}
-            onSelect={setDate}
+            onSelect={(e) => {
+              setDate(e);
+              close();
+            }}
             initialFocus
           />
         </Dropdown>

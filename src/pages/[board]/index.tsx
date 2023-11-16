@@ -77,6 +77,45 @@ const BoardPage = () => {
     });
   }
 
+  function updateCardsInList(card: Card) {
+    setBoardDetails((prev: any) => {
+      return {
+        ...prev,
+        columns: prev.columns.map((column: Column) => {
+          if (column.id === card.columnId) {
+            return {
+              ...column,
+              cards: [
+                ...column.cards.filter((c: Card) => c.id !== card.id),
+                card,
+              ],
+            };
+          } else {
+            return column;
+          }
+        }),
+      };
+    });
+  }
+
+  function removeCardFromList(card: Card) {
+    setBoardDetails((prev: any) => {
+      return {
+        ...prev,
+        columns: prev.columns.map((column: Column) => {
+          if (column.id === card.columnId) {
+            return {
+              ...column,
+              cards: [...column.cards.filter((c: Card) => c.id !== card.id)],
+            };
+          } else {
+            return column;
+          }
+        }),
+      };
+    });
+  }
+
   function removeColumnFromBoard(column: Column) {
     setBoardDetails((prev: any) => {
       return {
@@ -165,6 +204,8 @@ const BoardPage = () => {
                       column={column}
                       moveColumn={moveColumn}
                       addCardToList={addCardToList}
+                      updateCardsInList={updateCardsInList}
+                      removeCardFromList={removeCardFromList}
                       removeColumnFromBoard={removeColumnFromBoard}
                     />
                   ))}
