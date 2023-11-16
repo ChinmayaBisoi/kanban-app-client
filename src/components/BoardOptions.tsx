@@ -31,7 +31,10 @@ const BoardOptions = ({
       />
       <Dropdown wrapperCss="right-0" show={show} close={close}>
         <div className="flex flex-col gap-1">
-          <BoardInfo boardDetails={boardDetails} />
+          <BoardInfo
+            title={boardDetails.title}
+            description={boardDetails.title}
+          />
           <DeleteBoard title={boardDetails.title} boardId={boardDetails.id} />
         </div>
       </Dropdown>

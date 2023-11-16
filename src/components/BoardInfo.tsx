@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { Button } from "./ui/button";
-import { toast } from "./ui/use-toast";
 import Popup from "./common/Popup";
-import { BoardDetails } from "@/types/board";
+import { Button } from "./ui/button";
 
 const BoardInfo = ({
-  boardDetails,
+  title = "",
+  description,
 }: {
-  boardDetails: Partial<BoardDetails>;
+  title?: string;
+  description?: string;
 }) => {
   const [show, setShow] = useState(false);
   function open() {
@@ -31,7 +31,16 @@ const BoardInfo = ({
       <Popup wrapperCss="min-w-[400px] max-h-[500px]" show={show} close={close}>
         <div className="flex flex-col gap-4">
           <h2 className="text-lg font-medium">Board Details</h2>
-          <div className="flex flex-col">hi</div>
+          <div className="flex flex-col gap-3">
+            <div>
+              <div className="text-sm font-semibold">Board Name</div>
+              <div>{title}</div>
+            </div>
+            <div>
+              <div className="text-sm font-semibold">Description</div>
+              <div>{description}</div>
+            </div>
+          </div>
         </div>
       </Popup>
     </div>

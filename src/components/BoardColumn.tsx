@@ -7,10 +7,14 @@ export default function BoardColumn({
   column,
   index,
   moveColumn,
+  removeColumnFromBoard,
+  addCardToList,
 }: {
   column: Column;
   index: number;
   moveColumn: (fromIndex: number, toIndex: number) => void;
+  removeColumnFromBoard: (x: Column) => void;
+  addCardToList: (x: Card) => void;
 }) {
   const id = column.id;
 
@@ -36,7 +40,10 @@ export default function BoardColumn({
     >
       <div className="flex justify-between items-center gap-4">
         <p className="ml-2 font-semibold text-sm">{column.title}</p>
-        <BoardColumnOptions column={column} />
+        <BoardColumnOptions
+          column={column}
+          removeColumnFromBoard={removeColumnFromBoard}
+        />
       </div>
       <div className="flex flex-col gap-2">
         {column.cards.map((card: Card) => {
@@ -47,7 +54,11 @@ export default function BoardColumn({
           );
         })}
       </div>
-      <AddCard />
+      <AddCard
+        addCardToList={addCardToList}
+        columnTitle={column.title}
+        columnId={column.id}
+      />
     </div>
   );
 }

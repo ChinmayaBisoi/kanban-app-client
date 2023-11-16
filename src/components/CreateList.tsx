@@ -2,10 +2,21 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { toast } from "./ui/use-toast";
 import Popup from "./common/Popup";
+import addList from "@/pages/api/columns/add-list";
+import { Column } from "@/types/board";
 
-const CreateList = () => {
+const CreateList = ({
+  boardId = "",
+  addNewColumnToBoard,
+}: {
+  boardId?: string;
+  addNewColumnToBoard: (x: Column) => void;
+}) => {
   const [show, setShow] = useState(false);
   const [title, setTitle] = useState("");
+
+  const [loading, setLoading] = useState(false);
+
   function open() {
     setShow(true);
   }
@@ -14,17 +25,44 @@ const CreateList = () => {
     setShow(false);
   }
 
-  function handleCreateList() {
+  function errorAlert(err: string = "") {
+    toast({
+      title: "Unexpected Error",
+      description: err,
+      variant: "destructive",
+    });
+  }
+
+  async function handleCreateList() {
+    if (!boardId) {
+      toast({ title: "Board Id is missing !", variant: "destructive" });
+      return;
+    }
     if (!title) {
       toast({ title: "Title is required !", variant: "destructive" });
       return;
     }
 
-    // api to ccreate list
+    setLoading(true);
+    await addList({ title, boardId })
+      .then((res) => {
+        console.log(res);
+        if (res.ok) {
+          addNewColumnToBoard(res.column);
+          toast({ title: "List added successfullt" });
+          close();
+        } else {
+          errorAlert();
+        }
+      })
+      .catch((err) => {
+        errorAlert(err.message);
+      });
+    setLoading(false);
   }
 
   return (
-    <div className="relative">
+    <div className="relative mr-8">
       <Button
         variant="outline"
         onClick={open}
@@ -47,7 +85,9 @@ const CreateList = () => {
               value={title}
             />
           </div>
-          <Button onClick={handleCreateList}>Create</Button>
+          <Button loading={loading} onClick={handleCreateList}>
+            Create
+          </Button>
         </div>
       </Popup>
     </div>

@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 import getBoardById from "../api/boards/get-board-by-id";
 import { toast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import { BoardDetails, Column } from "@/types/board";
+import { BoardDetails, Card, Column } from "@/types/board";
 
 function ShimmerBoardTopNav() {
   return (
@@ -69,6 +69,36 @@ const BoardPage = () => {
       variant: "destructive",
     });
     setError(true);
+  }
+
+  function addnewColumnToBoard(column: Column) {
+    setBoardDetails((prev: any) => {
+      return { ...prev, columns: [...prev.columns, column] };
+    });
+  }
+
+  function removeColumnFromBoard(column: Column) {
+    setBoardDetails((prev: any) => {
+      return {
+        ...prev,
+        columns: prev.columns.filter((c: Column) => c.id !== column.id),
+      };
+    });
+  }
+
+  function addCardToList(card: Card) {
+    setBoardDetails((prev: any) => {
+      return {
+        ...prev,
+        columns: prev.columns.map((column: Column) => {
+          if (column.id === card.columnId) {
+            return { ...column, cards: [...column.cards, card] };
+          } else {
+            return column;
+          }
+        }),
+      };
+    });
   }
 
   async function fetchBoardById() {
@@ -134,10 +164,15 @@ const BoardPage = () => {
                       index={index}
                       column={column}
                       moveColumn={moveColumn}
+                      addCardToList={addCardToList}
+                      removeColumnFromBoard={removeColumnFromBoard}
                     />
                   ))}
                 </DndProvider>
-                <CreateList />
+                <CreateList
+                  boardId={boardDetails.id}
+                  addNewColumnToBoard={addnewColumnToBoard}
+                />
               </>
             )}
           </div>
