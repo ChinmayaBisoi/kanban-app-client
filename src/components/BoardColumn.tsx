@@ -11,6 +11,7 @@ export default function BoardColumn({
   addCardToList,
   updateCardsInList,
   removeCardFromList,
+  updateListInfo,
   updateCardOrder,
 }: {
   column: Column;
@@ -19,6 +20,7 @@ export default function BoardColumn({
   addCardToList: (x: Card) => void;
   updateCardsInList: (x: Card) => void;
   removeCardFromList: (x: Card) => void;
+  updateListInfo: (x: string, y: string) => void;
   updateCardOrder: any;
 }) {
   const id = column.id;
@@ -29,6 +31,7 @@ export default function BoardColumn({
         <p className="ml-2 font-semibold text-sm">{column.title}</p>
         <BoardColumnOptions
           column={column}
+          updateListInfo={updateListInfo}
           removeColumnFromBoard={removeColumnFromBoard}
         />
       </div>

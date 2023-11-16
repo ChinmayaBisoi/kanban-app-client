@@ -9,7 +9,9 @@ import EditBoard from "./EditBoard";
 
 const BoardOptions = ({
   boardDetails,
+  updateBoardInfo,
 }: {
+  updateBoardInfo: (x: { description: string; title: string }) => void;
   boardDetails: Partial<BoardDetails>;
 }) => {
   const [show, setShow] = useState(false);
@@ -32,11 +34,12 @@ const BoardOptions = ({
       />
       <Dropdown wrapperCss="right-0" show={show} close={close}>
         <div className="flex flex-col gap-1">
-          {/* <EditBoard
+          <EditBoard
+            updateBoardInfo={updateBoardInfo}
             title={boardDetails.title}
             boardId={boardDetails.id}
             description={boardDetails.description}
-          /> */}
+          />
           <BoardInfo
             title={boardDetails.title}
             description={boardDetails.title}

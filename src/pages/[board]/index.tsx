@@ -48,13 +48,6 @@ const BoardPage = () => {
     (a, b) => a.order - b.order
   );
 
-  const moveColumn = (fromIndex: number, toIndex: number) => {
-    const updatedColumns = [...boardColumns];
-    const [movedColumn] = updatedColumns.splice(fromIndex, 1);
-    updatedColumns.splice(toIndex, 0, movedColumn);
-    // setBoardColumns(updatedColumns);
-  };
-
   useEffect(() => {
     console.log(boardColumns);
   });
@@ -198,6 +191,37 @@ const BoardPage = () => {
     setLoading(false);
   }
 
+  function updateBoardInfo({
+    title,
+    description,
+  }: {
+    title: string;
+    description: string;
+  }) {
+    setBoardDetails((prev: any) => {
+      return {
+        ...prev,
+        title,
+        description,
+      };
+    });
+  }
+
+  function updateListInfo(listname: string, listId: string) {
+    setBoardDetails((prev: any) => {
+      return {
+        ...prev,
+        columns: prev.columns.map((col: Column) => {
+          if (col.id === listId) {
+            return { ...col, title: listname };
+          } else {
+            return col;
+          }
+        }),
+      };
+    });
+  }
+
   useEffect(() => {
     fetchBoardById();
   }, [isLoggedIn, boardId]);
@@ -224,7 +248,10 @@ const BoardPage = () => {
               <>
                 <h2 className="font-bold">{boardDetails.title}</h2>
                 <div className="flex gap-4">
-                  <BoardOptions boardDetails={boardDetails} />
+                  <BoardOptions
+                    updateBoardInfo={updateBoardInfo}
+                    boardDetails={boardDetails}
+                  />
                 </div>
               </>
             )}
@@ -236,6 +263,7 @@ const BoardPage = () => {
               <>
                 {boardColumns.map((column: Column, index) => (
                   <BoardColumn
+                    updateListInfo={updateListInfo}
                     updateCardOrder={updateCardOrder}
                     key={column.id}
                     column={column}

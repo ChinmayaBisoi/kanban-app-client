@@ -3,70 +3,60 @@ import { useState } from "react";
 import Popup from "./common/Popup";
 import { Button } from "./ui/button";
 import { toast } from "./ui/use-toast";
+import updateList from "@/pages/api/columns/update-list";
 
-const EditBoard = ({
+const EditList = ({
   title = "",
-  description = "",
-  boardId = "",
-  updateBoardInfo,
+
+  listId = "",
+  updateListInfo,
 }: {
   title?: string;
-  description?: string;
-  boardId?: string;
-  updateBoardInfo: (x: { title: string; description: string }) => void;
+  listId?: string;
+  updateListInfo: (x: string, y: string) => void;
 }) => {
   const [show, setShow] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
-  const [newDescription, setNewDescription] = useState(description);
 
   const [loading, setLoading] = useState(false);
 
   function open() {
     setShow(true);
     setNewTitle(newTitle);
-    setNewDescription(newDescription);
   }
 
   function close() {
     setShow(false);
   }
 
-  async function handleUpdateBoard() {
+  async function handleUpdateList() {
     if (!newTitle) {
       toast({ title: "New Title is required !", variant: "destructive" });
       return;
     }
-    if (!newDescription) {
-      toast({ title: "New Description is required !", variant: "destructive" });
-      return;
-    }
 
     setLoading(true);
-    await updateBoard({
+    await updateList({
       title: newTitle,
-      description: newDescription,
-      id: boardId,
+      id: listId,
     })
       .then((res) => {
         if (res.ok) {
           toast({
-            title: "Updated Board Info",
+            title: "Updated List Info",
           });
-          updateBoardInfo({
-            title: newTitle,
-            description: newDescription,
-          });
+          updateListInfo(newTitle, listId);
           close();
         } else {
           toast({
-            title: "Error updating board info",
+            title: "Error updating list info",
             variant: "destructive",
           });
         }
       })
       .catch((err) => {
         toast({
-          title: "Error updating board info",
+          title: "Error updating list info",
           description: err.message || "",
           variant: "destructive",
         });
@@ -82,12 +72,12 @@ const EditBoard = ({
         className="flex gap-1 items-center w-full"
       >
         {/* <span>-</span> */}
-        <span>Edit Board</span>
+        <span>Edit List</span>
       </Button>
       <Popup wrapperCss="min-w-[400px]" show={show} close={close}>
         <div className="flex flex-col gap-4">
           <h2 className="text-lg font-medium">
-            Edit Board <span className="underline">{title}</span>
+            Edit List <span className="underline">{title}</span>
           </h2>
           <div className="flex flex-col">
             <input
@@ -101,19 +91,8 @@ const EditBoard = ({
               value={newTitle}
             />
           </div>
-          <div className="flex flex-col">
-            <input
-              id="title"
-              type="text"
-              placeholder={title}
-              className="outline-none border w-full px-3 py-2 rounded-lg"
-              onChange={(e) => {
-                setNewDescription(e.target.value);
-              }}
-              value={newDescription}
-            />
-          </div>
-          <Button loading={loading} onClick={handleUpdateBoard}>
+
+          <Button loading={loading} onClick={handleUpdateList}>
             Save
           </Button>
         </div>
@@ -122,4 +101,4 @@ const EditBoard = ({
   );
 };
 
-export default EditBoard;
+export default EditList;
