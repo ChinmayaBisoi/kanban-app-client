@@ -14,12 +14,16 @@ const ProfilePage = () => {
             <h3 className="text-gray-500">View and manage your profile.</h3>
           </div>
         </div>
-        <div className="flex flex-col gap-8">
-          <div className="flex flex-col">
-            <p className="whitespace-nowrap">Email</p>
-            <p className="">{email} </p>
+        {isLoggedIn ? (
+          <div className="flex flex-col gap-8">
+            <div className="flex flex-col">
+              <p className="whitespace-nowrap">Email</p>
+              <p className="">{email} </p>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="text-lg">Login to view your profile</div>
+        )}
       </main>
     </LayoutWithSideNav>
   );
