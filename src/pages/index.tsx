@@ -19,11 +19,6 @@ export default function Home() {
     setLoading(false);
   }
 
-  useEffect(() => {
-    console.log("Page : /");
-    console.log(boards);
-  });
-
   async function fetchAllBoards() {
     if (!isLoggedIn) return;
     setLoading(true);

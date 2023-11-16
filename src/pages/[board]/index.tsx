@@ -1,18 +1,15 @@
-import BoardOptions from "@/components/BoardOptions";
 import BoardColumn from "@/components/BoardColumn";
-import Star from "@/components/icons/Star";
-import Layout from "@/components/layouts/Layout";
-import useScreenSize from "@/hooks/useScreenSize";
-import { useState, useEffect } from "react";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import BoardOptions from "@/components/BoardOptions";
 import CreateList from "@/components/CreateList";
-import { useLoginState } from "@/context/login-context";
-import { useRouter } from "next/router";
-import getBoardById from "../api/boards/get-board-by-id";
-import { toast } from "@/components/ui/use-toast";
+import Layout from "@/components/layouts/Layout";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/use-toast";
+import { useLoginState } from "@/context/login-context";
+import useScreenSize from "@/hooks/useScreenSize";
 import { BoardDetails, Card, Column } from "@/types/board";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import getBoardById from "../api/boards/get-board-by-id";
 
 function ShimmerBoardTopNav() {
   return (
@@ -38,7 +35,7 @@ function ShimmerColumns() {
 }
 
 const BoardPage = () => {
-  const { height: customHeight } = useScreenSize(-129, 0);
+  const customHeight = useScreenSize(-129);
   const { isLoggedIn } = useLoginState();
   const { query } = useRouter();
   const { board: boardId } = query;
@@ -107,6 +104,47 @@ const BoardPage = () => {
             return {
               ...column,
               cards: [...column.cards.filter((c: Card) => c.id !== card.id)],
+            };
+          } else {
+            return column;
+          }
+        }),
+      };
+    });
+  }
+
+  function updateCardOrder(columnId: string, x: any, y: any) {
+    console.log(x, y);
+    setBoardDetails((prev: any) => {
+      return {
+        ...prev,
+        columns: prev.columns.map((column: Column) => {
+          if (column.id === columnId) {
+            const updatedCards: any = [...column.cards];
+            const movedCard: any = updatedCards.find(
+              (card: Card) => card.id === x.id
+            );
+
+            let fromIndex: any, toIndex: any;
+
+            updatedCards.forEach((card: Card, index: number) => {
+              if (card.id === x.id) {
+                fromIndex = index;
+              }
+              if (card.id === y.id) {
+                toIndex = index;
+              }
+              return `Element at index ${index} is ${card}`;
+            });
+
+            updatedCards.splice(fromIndex, 1);
+            updatedCards.splice(toIndex, 0, movedCard);
+            const final = updatedCards.map((card: any, index: number) => {
+              return { ...card, order: index + 1 };
+            });
+            return {
+              ...column,
+              cards: final,
             };
           } else {
             return column;
@@ -196,20 +234,18 @@ const BoardPage = () => {
               <ShimmerColumns />
             ) : (
               <>
-                <DndProvider backend={HTML5Backend}>
-                  {boardColumns.map((column: Column, index) => (
-                    <BoardColumn
-                      key={column.id}
-                      index={index}
-                      column={column}
-                      moveColumn={moveColumn}
-                      addCardToList={addCardToList}
-                      updateCardsInList={updateCardsInList}
-                      removeCardFromList={removeCardFromList}
-                      removeColumnFromBoard={removeColumnFromBoard}
-                    />
-                  ))}
-                </DndProvider>
+                {boardColumns.map((column: Column, index) => (
+                  <BoardColumn
+                    updateCardOrder={updateCardOrder}
+                    key={column.id}
+                    column={column}
+                    addCardToList={addCardToList}
+                    updateCardsInList={updateCardsInList}
+                    removeCardFromList={removeCardFromList}
+                    removeColumnFromBoard={removeColumnFromBoard}
+                  />
+                ))}
+
                 <CreateList
                   boardId={boardDetails.id}
                   addNewColumnToBoard={addnewColumnToBoard}

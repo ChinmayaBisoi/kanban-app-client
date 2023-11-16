@@ -5,7 +5,7 @@ export default async function updateBoard({ title, description, id }) {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    const raw = JSON.stringify({ title, description, id, isPinned, labels });
+    const raw = JSON.stringify({ title, description, id });
 
     const response = await fetch(`${BACKEND_HOST}/todos`, {
       method: "PATCH",

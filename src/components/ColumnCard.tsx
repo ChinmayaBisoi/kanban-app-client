@@ -1,4 +1,5 @@
 import updateCard from "@/pages/api/cards/edit-card";
+import { useDrag, useDrop } from "react-dnd";
 import { Card } from "@/types/board";
 import { useState } from "react";
 import CardWrapper from "./CardWrapper";
@@ -7,6 +8,7 @@ import { toast } from "./ui/use-toast";
 import Popup from "./common/Popup";
 import { Button } from "./ui/button";
 import deleteCard from "@/pages/api/cards/delete-card";
+import { useDebounce } from "@/hooks/useDebounce";
 
 const ColumnCard = ({
   card,
@@ -14,10 +16,12 @@ const ColumnCard = ({
   columnId,
   updateCardsInList,
   removeCardFromList,
+  updateCardOrder,
 }: {
   card: Card;
   columnTitle: string;
   columnId: string;
+  updateCardOrder: any;
   updateCardsInList: (x: Card) => void;
   removeCardFromList: (x: Card) => void;
 }) => {
@@ -48,6 +52,26 @@ const ColumnCard = ({
   function close() {
     setShow(false);
   }
+
+  const id = card.id;
+  const index = card.order;
+
+  const [, ref] = useDrag({
+    type: "ColumnCard",
+    item: { id, index },
+  });
+
+  const [, drop] = useDrop({
+    accept: "ColumnCard",
+    hover: (draggedItem: any) => {
+      const draggedIndex = draggedItem.index;
+      updateCardOrder(
+        columnId,
+        { id: draggedItem.id, order: draggedIndex },
+        { id: card.id, order: card.order }
+      );
+    },
+  });
 
   async function handleAddCard() {
     if (!card.id) {
@@ -122,60 +146,62 @@ const ColumnCard = ({
   }
 
   return (
-    <CardWrapper
-      date={date}
-      setDate={setDate}
-      title={title}
-      setTitle={setTitle}
-      description={description}
-      setDescription={setDescription}
-      onClickBtn={handleAddCard}
-      btnTitle={"Edit"}
-      show={show}
-      close={close}
-      columnTitle={columnTitle}
-      btnLoading={loading}
-    >
-      <div className="flex gap-1 justify-between hover:bg-gray-300 cursor-pointer rounded-md p-2 pr-1 bg-gray-200">
-        <div onClick={open}>{card.title}</div>
-        <div className="relative">
-          <Cross
-            onClick={showConfirmDeletePopup}
-            iconCss="w-4 h-4"
-            wrapperCss="h-fit p-[0px] rounded-none hover:text-white hover:bg-destructive"
-          />
-          <Popup
-            wrapperCss="min-w-[360px]"
-            show={showDeletePopup}
-            close={closeConfirmDeletePopup}
-          >
-            <div className="flex flex-col gap-6">
-              <div>Are you sure you wish to delete the card ?</div>
-              <div>
-                <p className="text-sm font-semibold">Card Title</p>{" "}
-                <p>{card.title}</p>
+    <div ref={(node) => ref(drop(node))}>
+      <CardWrapper
+        date={date}
+        setDate={setDate}
+        title={title}
+        setTitle={setTitle}
+        description={description}
+        setDescription={setDescription}
+        onClickBtn={handleAddCard}
+        btnTitle={"Edit"}
+        show={show}
+        close={close}
+        columnTitle={columnTitle}
+        btnLoading={loading}
+      >
+        <div className="flex gap-1 justify-between hover:bg-gray-300 cursor-pointer rounded-md p-2 pr-1 bg-gray-200">
+          <div onClick={open}>{card.title}</div>
+          <div className="relative">
+            <Cross
+              onClick={showConfirmDeletePopup}
+              iconCss="w-4 h-4"
+              wrapperCss="h-fit p-[0px] rounded-none hover:text-white hover:bg-destructive"
+            />
+            <Popup
+              wrapperCss="min-w-[360px]"
+              show={showDeletePopup}
+              close={closeConfirmDeletePopup}
+            >
+              <div className="flex flex-col gap-6">
+                <div>Are you sure you wish to delete the card ?</div>
+                <div>
+                  <p className="text-sm font-semibold">Card Title</p>{" "}
+                  <p>{card.title}</p>
+                </div>
+                <div>
+                  <p className="text-sm font-semibold"> Card Description</p>{" "}
+                  <p> {card.description}</p>
+                </div>
+                <div className="flex justify-end gap-4">
+                  <Button onClick={closeConfirmDeletePopup} variant="secondary">
+                    Cancel
+                  </Button>
+                  <Button
+                    loading={deleteBtnLoading}
+                    onClick={handleDeleteCard}
+                    variant="destructive"
+                  >
+                    Delete
+                  </Button>
+                </div>
               </div>
-              <div>
-                <p className="text-sm font-semibold"> Card Description</p>{" "}
-                <p> {card.description}</p>
-              </div>
-              <div className="flex justify-end gap-4">
-                <Button onClick={closeConfirmDeletePopup} variant="secondary">
-                  Cancel
-                </Button>
-                <Button
-                  loading={deleteBtnLoading}
-                  onClick={handleDeleteCard}
-                  variant="destructive"
-                >
-                  Delete
-                </Button>
-              </div>
-            </div>
-          </Popup>
+            </Popup>
+          </div>
         </div>
-      </div>
-    </CardWrapper>
+      </CardWrapper>
+    </div>
   );
 };
 
