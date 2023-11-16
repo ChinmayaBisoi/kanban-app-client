@@ -111,7 +111,7 @@ const AuthForm = ({ isRegisterForm = false }: { isRegisterForm?: boolean }) => {
     // call register api here
   }
   return (
-    <div className="h-screen w-screen p-8">
+    <div className="h-screen w-screen md:p-8 p-4">
       <Link href="/">
         <Button variant="outline" className="flex gap-1">
           <ChevronLeft />
@@ -119,7 +119,7 @@ const AuthForm = ({ isRegisterForm = false }: { isRegisterForm?: boolean }) => {
         </Button>
       </Link>
       <div className="mt-20 flex items-center justify-center ">
-        <div className="w-fit shadow-xl rounded-lg flex flex-col gap-4 p-10 px-20">
+        <div className="min-w-[350px] md:min-w-[400px] shadow-xl rounded-lg flex flex-col gap-4 p-10 md:px-8 px-4">
           <div className="flex flex-col">
             <label htmlFor="email" className="">
               Email

@@ -26,6 +26,9 @@ const AddCard = ({
 
   function close() {
     setShow(false);
+    setTitle("");
+    setDescription("");
+    setDate("");
   }
 
   async function handleAddCard() {

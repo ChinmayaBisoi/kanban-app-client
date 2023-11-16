@@ -40,6 +40,9 @@ const ColumnCard = ({
 
   function open() {
     setShow(true);
+    setTitle(card.title);
+    setDescription(card.description);
+    setDate(card.dueDate);
   }
 
   function close() {
@@ -87,7 +90,6 @@ const ColumnCard = ({
   }
 
   async function handleDeleteCard() {
-    console.log(card);
     if (!card.id) {
       toast({ title: "Card Id is missing here !", variant: "destructive" });
       return;

@@ -23,6 +23,8 @@ const CreateBoard = ({
   }
 
   function close() {
+    setTitle("");
+    setDescription("");
     setShow(false);
   }
 
@@ -77,7 +79,11 @@ const CreateBoard = ({
         <span>+</span>
         <span>Create Board</span>
       </Button>
-      <Popup wrapperCss="min-w-[400px]" show={show} close={close}>
+      <Popup
+        wrapperCss="md:min-w-[400px] w-full max-w-[400px]"
+        show={show}
+        close={close}
+      >
         <div className="flex flex-col gap-4">
           <h2 className="text-lg font-semibold">Create Board</h2>
           <div className="flex flex-col">
