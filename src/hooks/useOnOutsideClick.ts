@@ -1,8 +1,11 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 
-export function useOnOutsideClick(ref : React.RefObject<any>, functionToRun = () => {}) {
+export function useOnOutsideClick(
+  ref: React.RefObject<any>,
+  functionToRun = () => {}
+) {
   useEffect(() => {
-    function handleClickOutside(event) {
+    function handleClickOutside(event: any) {
       if (ref?.current && !ref?.current?.contains(event.target)) {
         functionToRun();
       }
