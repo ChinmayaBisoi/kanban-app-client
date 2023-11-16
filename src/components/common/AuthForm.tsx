@@ -180,7 +180,7 @@ const AuthForm = ({ isRegisterForm = false }: { isRegisterForm?: boolean }) => {
                     setConfirmPassword(e.target.value);
                   }}
                 />
-                {showPassword ? (
+                {showConfirmPassword ? (
                   <EyeOpen
                     onClick={() => {
                       setShowConfirmPassword(false);

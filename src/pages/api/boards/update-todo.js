@@ -1,12 +1,6 @@
 import { BACKEND_HOST } from "@/constants/env";
 
-export default async function updateTodo({
-  title,
-  description,
-  id,
-  isPinned = false,
-  labels = [],
-}) {
+export default async function updateBoard({ title, description, id }) {
   try {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");

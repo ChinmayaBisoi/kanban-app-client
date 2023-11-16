@@ -5,6 +5,7 @@ import Dropdown from "./common/Dropdown";
 import VerticalDots from "./icons/VerticalDots";
 import BoardInfo from "./BoardInfo";
 import { BoardDetails } from "@/types/board";
+import EditBoard from "./EditBoard";
 
 const BoardOptions = ({
   boardDetails,
@@ -31,6 +32,11 @@ const BoardOptions = ({
       />
       <Dropdown wrapperCss="right-0" show={show} close={close}>
         <div className="flex flex-col gap-1">
+          {/* <EditBoard
+            title={boardDetails.title}
+            boardId={boardDetails.id}
+            description={boardDetails.description}
+          /> */}
           <BoardInfo
             title={boardDetails.title}
             description={boardDetails.title}
