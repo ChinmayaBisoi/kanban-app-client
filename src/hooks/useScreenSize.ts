@@ -5,8 +5,7 @@ export default function useScreenSize(heightToAdd: number | undefined = 0) {
 
   useEffect(() => {
     setScreenSize(window?.innerHeight || 0 + heightToAdd);
-  }, [window, window.innerHeight]);
-
+  }, []);
   useEffect(() => {
     function getCurrentDimension(heightToAdd: number) {
       return window?.innerHeight || 0 + heightToAdd;
